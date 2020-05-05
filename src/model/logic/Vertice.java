@@ -13,10 +13,6 @@ public class Vertice{
 	private double longitud;
 	private double latitud;
 
-	/**
-	 * Construir un arreglo con la capacidad maxima inicial.
-	 * @param max Capacidad maxima inicial
-	 */
 	public Vertice(int pId, double pLongitud, double pLatitud)
 	{
 		id = pId;

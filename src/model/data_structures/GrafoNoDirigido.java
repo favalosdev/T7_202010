@@ -1,73 +1,86 @@
 package model.data_structures;
 
-public class GrafoNoDirigido<K extends Comparable<K>, V extends Comparable<V>>{
+public class GrafoNoDirigido<K extends Comparable<K>, V>{
 
-	private int V;
-	private int E;
-	private Bag<K, V>[] adj;
+	private int numVertices;
+	private int numArcos;
+	private SeparateChainingHashTable<K,Vertice<K,V>> adj;
 
 	GrafoNoDirigido (int n){
-		this.V = n; 
-		this.E = 0;
-		adj = (Bag<K, V>[]) new Bag[n];
-		for (int v = 0; v < n; v++)
-			adj[v] = new Bag<K, V>();
+		this.numVertices = n; 
+		this.numArcos = 0;
+		adj = new SeparateChainingHashTable<K,Vertice<K,V>>(n);
 	}
 
-	int V(){
-		return V;
+	public int V(){
+		return numVertices;
 	}
 
-	int E(){
-		return E;
+	public int E(){
+		return numArcos;
+	}
+	
+	public Vertice<K, V> darVertice(K idVert){
+		for (int i = 0; i < adj.length; i++) {
+			if (adj[i].)
+		}
+	}
+	
+	public Arco<K, V> darArco(K idOrig, K idDest){
+		
 	}
 
 	//TODO añadir costo
-	void addEdge(K idVertexIni, K idVertexFin, double cost){
-		adj[idVertexIni].add(idVertexFin);
-		adj[idVertexFin].add(idVertexIni);
-		E++;
+	public void addEdge(K idVertexIni, K idVertexFin, double cost){
+		adj[(int) idVertexIni].add(idVertexFin);
+		adj[(int) idVertexFin].add(idVertexIni);
+		numArcos++;
 	}
 
-	V getInfoVertex(K idVertex){
-
+	public V getInfoVertex(K idVertex){
+		for (int i = 0; i < adj.length; i++) {
+			while(adj[i].iterator().hasNext()){
+				if (adj[i].iterator().next().darId().compareTo(idVertex) == 0){
+					return (V) adj[i].iterator().next().darInfo();
+				}
+			}
+		}
+		return null;
 	}
 
-	void setInfoVertex(K idVertex, V infoVertex){
-
-	}
-
-	double getCostArc(K	idVertexIni, K idVertexFin){
-
-	}
-
-	void setCostArc(K idVertexIni, K idVertexFin, double cost){
-
-	}
-
-	void addVertex(K idVertex, V infoVertex){
+	public void setInfoVertex(K idVertex, V infoVertex){
 
 	}
 
-	Iterable<K> adj (K idVertex){
+	public double getCostArc(K idVertexIni, K idVertexFin){
+		
+	}
+
+	public void setCostArc(K idVertexIni, K idVertexFin, double cost){
+
+	}
+
+	public void addVertex(K idVertex, V infoVertex){
+
+	}
+
+	public Iterable<K> adj (K idVertex){
 		return adj[idVertex];
 	}
 
-	void uncheck(){
+	public void uncheck(){
 
 	}
 
-	void dfs(K s){
+	public void dfs(K s){
 
 	}
 
-	int cc(){
+	public int cc(){
 
 	}
 
-	Iterable<K> getCC(K idVertex){
+	public Iterable<K> getCC(K idVertex){
 
 	}
-
-
 }
