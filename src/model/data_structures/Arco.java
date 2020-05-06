@@ -10,15 +10,14 @@ package model.data_structures;
 public class Arco<K extends Comparable<K>, V>{
 
 	private double costo;
-	private Vertice<K,V> origen;
-	private Vertice<K,V> destino;
+	private Vertice<K, V> origen;
+	private Vertice<K, V> destino;
 
 
-	public Arco(Vertice<K,V> orig, Vertice<K,V> dest, double costoP)
-	{
+	public Arco(Vertice<K, V> orig, Vertice<K, V> dest, double pCosto) {
 		origen = orig;
 		destino = dest;
-		costo = costoP;
+		costo = pCosto;
 	}
 	
 	public Vertice<K, V> darOrigen(){
@@ -32,5 +31,8 @@ public class Arco<K extends Comparable<K>, V>{
 	public double darCosto(){
 		return costo;
 	}
-
+	
+	public void cambiarCosto(double pCosto) {
+		costo = pCosto;
+	}
 }

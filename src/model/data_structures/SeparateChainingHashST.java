@@ -1,6 +1,6 @@
 package model.data_structures;
 
-import model.data_structures.*;
+import model.data_structures.LinkedQueue;
 
 /******************************************************************************
  *  Compilation:  javac SeparateChainingHashST.java
