@@ -2,20 +2,19 @@ package model.data_structures;
 
 import java.util.Iterator;
 
-public class GenericIterator<T extends Comparable<T>> implements Iterator<T> {
-	private Nodo<T> current;
+public class GenericIterator<T> implements Iterator<T> {
 	
-	public GenericIterator(IListaEnlazada<T> pKeys) {
-		current = pKeys.darCabeza();
+	private LinkedQueue<T> queue;
+	
+	public GenericIterator(LinkedQueue<T> pQueue) {
+		queue = pQueue;
 	}
 	
 	public boolean hasNext() {
-		return current != null;
+		return queue.isEmpty();
 	}
-
+	
 	public T next() {
-		T dato = current.darDato();
-		current = current.darSiguiente();
-		return dato;
+		return queue.dequeue();
 	}
 }
