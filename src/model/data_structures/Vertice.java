@@ -17,6 +17,7 @@ public class Vertice<K extends Comparable<K>, V>{
 	public Vertice(K id, V info) {
 		idVertice = id;
 		infoVertice = info;
+		arcoLlegada = null;
 	}
 	
 	public K darId() {
@@ -46,11 +47,18 @@ public class Vertice<K extends Comparable<K>, V>{
 	}
 	
 	public void marcar(int colorP, Arco<K,V> arcoLlega){
+		marca = true;
+		color = colorP;
+		arcoLlegada = arcoLlega;
 		
 	}
 	
+	public int darColor(){
+		return color;
+	}
+	
 	public void desmarcar( ){
-		
+		marca = false;
 	}
 	
 	public void dfs( int colorP, Arco<K,V> arcoLlega ){

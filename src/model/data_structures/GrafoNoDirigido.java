@@ -1,10 +1,12 @@
 package model.data_structures;
 
+import java.util.Iterator;
 
 public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	private int V;
 	private int E;
+	private int coloresUsados;
 	private SeparateChainingHashST<K, Vertice<K, V>> adj;
 
 	GrafoNoDirigido (int n){
@@ -39,37 +41,27 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	public void setInfoVertex(K idVertex, V infoVertex){
 		adj.get(idVertex).ponerInfo(infoVertex);
 	}
-
-	public double getCostArc(K idVertexIni, K idVertexFin){
-		Iterable<Arco<K, V>> arcos = adj.get(idVertexIni).darAdyacentes();
+	
+	public Arco<K,V> darArco(K idOrig, K idDest){
+		Iterable<Arco<K, V>> arcos = adj.get(idOrig).darAdyacentes();
 
 		for (Arco<K, V> arco : arcos) {
-			if (arco.darDestino().darId().compareTo(idVertexFin) == 0)
-				return arco.darCosto();
+			if (arco.darDestino().darId().compareTo(idDest) == 0)
+				return arco;
 		}
 
+		return null;
+	}
+
+	public double getCostArc(K idVertexIni, K idVertexFin){
+		Arco<K,V> arco = darArco(idVertexIni, idVertexFin);
+		if (arco != null) return arco.darCosto();
 		return -1.0;
 	}
 
 	public void setCostArc(K idVertexIni, K idVertexFin, double cost){
-		Iterable<Arco<K, V>> arcos = adj.get(idVertexIni).darAdyacentes();
-		boolean exists = false;
-		
-		for (Arco<K, V> arco : arcos) {
-			if (arco.darDestino().darId().compareTo(idVertexFin) == 0) {
-				arco.cambiarCosto(cost);
-				exists = true;
-			}
-		}
-		
-		if (!exists) return;
-		
-		arcos = adj.get(idVertexFin).darAdyacentes();
-		
-		for (Arco<K, V> arco : arcos) {
-			if (arco.darDestino().darId().compareTo(idVertexIni) == 0)
-				arco.cambiarCosto(cost);
-		}
+		Arco<K,V> arco = darArco(idVertexIni, idVertexFin);
+		if (arco != null) arco.cambiarCosto(cost);
 	}
 
 	public void addVertex(K idVertex, V infoVertex) {
@@ -87,14 +79,45 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 
 	public void uncheck(){
-
+		Iterable<K> llaves = adj.keys();
+		for (K llave : llaves)
+		{
+			Vertice<K,V> ver = adj.get(llave);
+			ver.desmarcar();
+		}
 	}
 
+	public void posDfs(K s, Arco<K,V> arcoInicial){
+		Iterable<K> llaves = adj(s);
+		adj.get(s).marcar(coloresUsados, arcoInicial);
+		for (K llave : llaves)
+			if (adj.get(llave).darMarca() == false){
+				posDfs(llave, darArco(s, llave));
+			}
+		coloresUsados++;
+	}
+	
 	public void dfs(K s){
-
+		uncheck();
+		posDfs(s, null);
 	}
-
+	
 	public int cc(){
-		return 1;
+		int contador = 0;
+		int[] colores;
+		marked = new boolean[G.V()];
+        id = new int[G.V()];
+        size = new int[G.V()];
+        for (int v = 0; v < G.V(); v++) {
+            if (!marked[v]) {
+                dfs(G, v);
+                res++;
+            }
+        }
+        return contador;
+	}
+	
+	public Iterable<K> getCC(K idVertex){
+		
 	}
 }
