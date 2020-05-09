@@ -8,21 +8,21 @@ package model.logic;
  *
  */
 public class Llave implements Comparable<Llave> {
-	
-		private final Integer id;
-		
-		public Llave(Integer pId) {
-			id = pId;
-		}
-		
-		public int hashCode(){
-			int hash = 17;
-			 hash = 31 * hash + id.hashCode();
-			 return hash;
-		}
 
-		public int compareTo(Llave otra) {
-			return hashCode() - otra.hashCode();
-		}
+	private final Integer id;
+
+	public Llave(Integer pId) {
+		id = pId;
+	}
+
+	public int hashCode(){
+		int hash = 17;
+		hash = 31 * hash + id.hashCode();
+		return hash;
+	}
+
+	public int compareTo(Llave otra) {
+		return hashCode() - otra.hashCode();
+	}
 
 }

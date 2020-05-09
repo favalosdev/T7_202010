@@ -36,47 +36,51 @@ public class Modelo {
 
 		try {
 			String cadena;
-			a = new FileReader(RUTAA);
 			v = new FileReader(RUTAV);
-			ba = new BufferedReader(a);
 			bv = new BufferedReader(v);
 
 			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
 
 			while((cadena = bv.readLine()) != null) {
 				String[] partes = cadena.split(",");
-				Informacion actual = new Informacion(new Integer(partes[0]), new Double(partes[1]), new Double(partes[2]));
-				grafo.addVertex(new Llave(new Integer(partes[0])), actual);
+				
+				Integer id = Integer.parseInt(partes[0]);
+				Double l1 = Double.parseDouble(partes[1]);
+				Double l2 = Double.parseDouble(partes[2]);
+				
+				Informacion actual = new Informacion(id, l1, l2);
+				Llave llave = new Llave(id);
+				grafo.addVertex(llave, actual);
 			}
 
 			bv.close();
 
+			a = new FileReader(RUTAA);
+			ba = new BufferedReader(a);
+			
 			while((cadena = ba.readLine()) != null) {
 				String[] partes = cadena.split(" ");
-				Llave llaveInicio = new Llave(new Integer(partes[0]));
+				
+				Integer id = Integer.parseInt(partes[0]);
+				
+				Llave llaveInicio = new Llave(id);
 				Informacion inicio = grafo.getInfoVertex(llaveInicio);
-
-				//if (verInicio == null) return;
-
+				
 				for (int i = 1; i < partes.length-1; i++) {
-					Llave llaveFin = new Llave(new Integer(partes[i]));
+					Llave llaveFin = new Llave(Integer.parseInt(partes[i]));
 					Informacion fin = grafo.getInfoVertex(llaveFin);
-
-					//if (verFin == null) return;
-
+					
 					grafo.addEdge(llaveInicio, llaveFin, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
 				}
 			}
 			
 			ba.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static double distance(double startLat, double startLong,
-			double endLat, double endLong) {
+	public static double distance(double startLat, double startLong, double endLat, double endLong) {
 
 		double dLat  = Math.toRadians((endLat - startLat));
 		double dLong = Math.toRadians((endLong - startLong));

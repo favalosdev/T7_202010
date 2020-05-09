@@ -1,21 +1,17 @@
 package model.data_structures;
 
-import java.util.Iterator;
-
-
 public class Vertice<K extends Comparable<K>, V>{
-
 	private K idVertice;
 	private V infoVertice;
 	
 	private boolean marca;
 	private int color;
 	private Arco<K,V> arcoLlegada;
-	private int distancia;
+	// private int distancia;
 	private Bag<Arco<K,V>> adj;
 
 	public Vertice(K id, V info) {
-		Bag<Arco<K,V>> adj = new Bag<Arco<K,V>>();
+		adj = new Bag<Arco<K,V>>();
 		idVertice = id;
 		infoVertice = info;
 		color = -1;
@@ -54,7 +50,6 @@ public class Vertice<K extends Comparable<K>, V>{
 		marca = true;
 		color = colorP;
 		arcoLlegada = arcoLlega;
-		
 	}
 	
 	public int darColor(){
@@ -71,5 +66,4 @@ public class Vertice<K extends Comparable<K>, V>{
 		marca = false;
 		arcoLlegada = null;
 	}
-
 }

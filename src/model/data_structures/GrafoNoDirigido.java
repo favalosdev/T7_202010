@@ -27,9 +27,8 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 
 	public void addEdge(K idVertexIni, K idVertexFin, double cost) {
-		Vertice<K,V> i = adj.get(idVertexIni);
-		Vertice<K,V> f = adj.get(idVertexFin);
-
+		Vertice<K, V> i = adj.get(idVertexIni);
+		Vertice<K, V> f = adj.get(idVertexFin);
 
 		if (i == null || f == null) return;
 		i.agregarArco(new Arco<K,V>(i, f, cost));
