@@ -1,6 +1,6 @@
 package model.data_structures;
 
-import model.data_structures.LinkedQueue;
+import java.util.Iterator;
 
 /******************************************************************************
  *  Compilation:  javac SeparateChainingHashST.java
@@ -42,7 +42,7 @@ import model.data_structures.LinkedQueue;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class SeparateChainingHashST<Key, Value> {
+public class SeparateChainingHashST<Key extends Comparable<Key>, Value> {
     private static final int INIT_CAPACITY = 4;
 
     private int n;                                // number of key-value pairs
@@ -178,12 +178,12 @@ public class SeparateChainingHashST<Key, Value> {
 
     // return keys in symbol table as an Iterable
     public Iterable<Key> keys() {
-        LinkedQueue<Key> queue = new LinkedQueue<Key>();
+        ListaEnlazada<Key> keys = new ListaEnlazada<Key>();
         for (int i = 0; i < m; i++) {
             for (Key key : st[i].keys())
-                queue.enqueue(key);
+            	keys.agregar(key);;
         }
-        return queue;
+        return keys;
     } 
 
     

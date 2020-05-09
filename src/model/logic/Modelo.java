@@ -10,6 +10,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.GsonBuilder;
+import model.data_structures.Arco;
+import model.data_structures.ListaEnlazada;
 
 import java.io.FileWriter;
 import java.io.File;
@@ -27,6 +30,10 @@ public class Modelo {
 	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
 	private GrafoNoDirigido<Integer, Informacion> grafo;
+	
+	public Modelo() {
+		grafo = null;
+	}
 
 	public void cargaTexto() {
 		FileReader a;
@@ -99,20 +106,37 @@ public class Modelo {
 		return EARTH_RADIUS * c; // <-- d
 	}
 
+	
+	
 	// Vamos a guardar los datos bajo el nombre de datos.json
 	public void escribirJson() {
 		Iterable<Integer> ids = grafo.keys();
-		Informacion [] informaciones = new Informacion[grafo.V()];
+		AuxiliarJson [] auxiliares = new AuxiliarJson[grafo.V()];
 
 		int indice = 0;
+		
+		for (Integer id : ids) {		
+			Iterable<Integer> idAdjs = grafo.adj(id);
+			int tamanio = ((ListaEnlazada<Integer>) idAdjs).darTamanio();
+			
+			Dupla [] duplas = new Dupla[tamanio];
+			
+			int indice1 = 0;
+			
+			for (Integer ida : idAdjs) {
+				Dupla dupla = new Dupla(grafo.darArco(id, ida).darCosto(), ida);
+				duplas[indice1++] = dupla;
+			}
+			
+			AuxiliarJson auxiliar = new AuxiliarJson(grafo.getInfoVertex(id), duplas);
+			auxiliares[indice++] = auxiliar;
+		}
 
-		for (Integer id : ids) informaciones[indice++] = grafo.getInfoVertex(id);
-
-		Gson graphWriter = new Gson();
-
+		Gson graphWriter = new GsonBuilder().setPrettyPrinting().create();
+		
 		try {
-			FileWriter fw = new FileWriter("./data/datos.gson");
-			graphWriter.toJson(informaciones, fw);
+			FileWriter fw = new FileWriter("./data/datos.geojson");
+			graphWriter.toJson(auxiliares, fw);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -123,21 +147,32 @@ public class Modelo {
 		JsonReader reader;
 
 		try {
-			reader = new JsonReader(new FileReader("./data/datos.gson"));
+			reader = new JsonReader(new FileReader("./data/datos.geojson"));
 			JsonElement elem = JsonParser.parseReader(reader);
 
-			JsonArray a = elem.getAsJsonArray();
+			JsonArray grafos = elem.getAsJsonArray();
 
 			grafo = new GrafoNoDirigido<Integer, Informacion>(997);
 
-			for (JsonElement e : a) {
+			for (JsonElement e : grafos) {
 
-				Integer id = e.getAsJsonObject().get("id").getAsInt();
+				Integer idInicio = e.getAsJsonObject().get("id").getAsInt();
 				Double longitud = e.getAsJsonObject().get("longitud").getAsDouble();
 				Double latitud = e.getAsJsonObject().get("latitud").getAsDouble();
 
-				Informacion nuevo = new Informacion(id, longitud, latitud);
-				grafo.addVertex(id, nuevo);
+				Informacion nuevo = new Informacion(idInicio, longitud, latitud);
+				grafo.addVertex(idInicio, nuevo);
+
+				
+				JsonArray arcos = e.getAsJsonObject().get("arcos").getAsJsonArray();
+				
+				for (JsonElement arco : arcos) {
+					
+					Integer idFinal = arco.getAsJsonObject().get("id").getAsInt();
+					Double costo = arco.getAsJsonObject().get("costo").getAsDouble();
+					
+					grafo.addEdge(idInicio, idFinal, costo);
+				}
 			}
 
 			reader.close();

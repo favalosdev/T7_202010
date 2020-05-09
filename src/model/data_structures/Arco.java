@@ -10,8 +10,9 @@ package model.data_structures;
 public class Arco<K extends Comparable<K>, V>{
 
 	private double costo;
-	private Vertice<K, V> origen;
-	private Vertice<K, V> destino;
+	private transient Vertice<K, V> origen;
+	private transient Vertice<K, V> destino;
+	private K llegada;
 
 
 	public Arco(Vertice<K, V> orig, Vertice<K, V> dest, double pCosto) {

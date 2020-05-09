@@ -81,10 +81,10 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	public Iterable<K> adj(K idVertex) {
 		Iterable<Arco<K,V>> arcos = adj.get(idVertex).darAdyacentes();
-		LinkedQueue<K> llaves = new LinkedQueue<K>();
+		ListaEnlazada<K> llaves = new ListaEnlazada<K>();
 
 		for (Arco<K, V> arco : arcos)
-			llaves.enqueue(arco.darDestino().darId());
+			llaves.agregar(arco.darDestino().darId());
 
 		return llaves;
 	}
@@ -128,11 +128,11 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		dfs(idVertex);
 		Vertice<K,V> inicio = adj.get(idVertex);
 		Iterable<K> llaves = adj.keys();
-		LinkedQueue<K> respuesta = new LinkedQueue<K>();
+		ListaEnlazada<K> respuesta = new ListaEnlazada<K>();
 		
 		for (K llave : llaves) {
 			Vertice<K,V> ver = adj.get(llave);
-			if (ver.darColor() == inicio.darColor()) respuesta.enqueue(llave);;
+			if (ver.darColor() == inicio.darColor()) respuesta.agregar(llave);;
 		}
 		return respuesta;
 	}

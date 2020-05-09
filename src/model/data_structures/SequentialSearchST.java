@@ -59,7 +59,7 @@ package model.data_structures;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class SequentialSearchST<Key, Value> {
+public class SequentialSearchST<Key extends Comparable<Key>, Value> {
     private int n;           // number of key-value pairs
     private Node first;      // the linked list of key-value pairs
 
@@ -191,9 +191,9 @@ public class SequentialSearchST<Key, Value> {
      * @return all keys in the symbol table
      */
     public Iterable<Key> keys()  {
-        LinkedQueue<Key> queue = new LinkedQueue<Key>();
+        ListaEnlazada<Key> queue = new ListaEnlazada<Key>();
         for (Node x = first; x != null; x = x.next)
-            queue.enqueue(x.key);
+            queue.agregar(x.key);
         return queue;
     }
 
