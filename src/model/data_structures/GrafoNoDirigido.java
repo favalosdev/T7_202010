@@ -106,22 +106,27 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 				posDfs(llave, darArco(s, llave), pColor);
 			}
 		}
-		colorActual++;
 	}
 
 	public void dfs(K s){
 		uncheck();
 		colorActual = 0;
 		posDfs(s, null, colorActual);
+		colorActual++;
 	}
 
 	public int cc(){
-		Iterable<K> llaves = adj.keys();
 		uncheck();
+		Iterable<K> llaves = adj.keys();
 		colorActual = 0;
-		for (K llave : llaves) if (adj.get(llave).darColor() == -1) posDfs(llave,null,colorActual);
+		for (K llave : llaves){
+			if (adj.get(llave).darColor() == -1) {
+				posDfs(llave,null,colorActual);
+				colorActual++;
+			}
+		}
 
-		return colorActual+1;
+		return colorActual;
 	}
 
 	public Iterable<K> getCC(K idVertex){

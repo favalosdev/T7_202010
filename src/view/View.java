@@ -18,8 +18,9 @@ public class View
 			System.out.println("2. Guardar grafo en un archivo .json");
 			System.out.println("3. Cargar el archivo .json");
 			System.out.println("4. Visualizar grafo");
-			System.out.println("5. Cargar estaciones y agregar al mapa");
-			System.out.println("6. Exit");
+			System.out.println("5. Cargar estaciones");
+			System.out.println("6. Agregar estaciones al mapa");
+			System.out.println("7. Exit");
 			System.out.println("Dar el numero de opcion a resolver, luego oprimir tecla Return: (e.g., 1):");
 		}
 

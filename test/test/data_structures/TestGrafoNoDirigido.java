@@ -126,8 +126,6 @@ public class TestGrafoNoDirigido {
 
 	@Test
 	public void testCc() {
-		setUp1();
-		assertEquals("El numero de componentes conectadas no es el correcto", 0, table.cc());
 		setUp2();
 		assertEquals("El numero de componentes conectadas no es el correcto", 5, table.cc());
 		setUp4();

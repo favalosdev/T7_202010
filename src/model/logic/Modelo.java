@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import com.google.gson.Gson;
+import java.text.ParseException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,6 +31,7 @@ public class Modelo {
 	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
 	private GrafoNoDirigido<Integer, Informacion> grafo;
+	private Estacion[] arregloEst;
 	
 	public Modelo() {
 		grafo = null;
@@ -179,6 +181,40 @@ public class Modelo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public int cargarEstaciones() {
+		int numeroEstaciones = 0;
+		
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader("./data/estacionpolicia.geojson"));
+			JsonElement elem = JsonParser.parseReader(reader);
+			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
+			arregloEst = new Estacion[e2.size()];
+
+			for(JsonElement e: e2) {
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+				
+				double latitud = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLATITUD").getAsDouble();
+				double longitud = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLONGITU").getAsDouble();
+
+				Estacion est = new Estacion(OBJECTID, longitud, latitud);
+				arregloEst[numeroEstaciones] = est;
+				
+				numeroEstaciones++;
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return numeroEstaciones;
+	}
+	
+	public Estacion[] darEstaciones(){
+		return arregloEst;
 	}
 
 	public int V(){

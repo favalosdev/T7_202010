@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import model.logic.Modelo;
+import quicktime.app.time.TaskAllMovies;
 import view.View;
 
 public class Controller {
@@ -56,20 +57,26 @@ public class Controller {
 					break;
 
 				case 4:
-					/////////TODO/////////
+					
 					break;
 
-				case 5: 
-					System.out.println("--------- \nContenido del Arreglo: ");
-					view.printModelo(modelo);
-					//System.out.println("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
+				case 5:
+					int tamanio = modelo.cargarEstaciones();
+					System.out.println("Numero estaciones: " + tamanio);
+					for (int i = 0; i < tamanio; i++) {
+						System.out.println(modelo.darEstaciones()[i].toString());
+					}
 					break;	
 					
 				case 6: 
 					System.out.println("--------- \n Hasta pronto !! \n---------"); 
 					lector.close();
 					fin = true;
-					break;	
+					break;
+					
+				case 7:
+					
+					break;
 
 				default: 
 					System.out.println("--------- \n Opcion Invalida !! \n---------");
