@@ -38,7 +38,11 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 
 	public V getInfoVertex(K idVertex) {
-		return adj.get(idVertex).darInfo();
+		
+		Vertice<K, V> v = adj.get(idVertex);
+		
+		
+		return v.darInfo();
 	}
 
 	public void setInfoVertex(K idVertex, V infoVertex){

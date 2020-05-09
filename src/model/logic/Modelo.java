@@ -61,9 +61,7 @@ public class Modelo {
 			while((cadena = ba.readLine()) != null) {
 				String[] partes = cadena.split(" ");
 				
-				Integer id = Integer.parseInt(partes[0]);
-				
-				Llave llaveInicio = new Llave(id);
+				Llave llaveInicio = new Llave(Integer.parseInt(partes[0]));
 				Informacion inicio = grafo.getInfoVertex(llaveInicio);
 				
 				for (int i = 1; i < partes.length-1; i++) {
