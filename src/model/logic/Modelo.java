@@ -26,7 +26,7 @@ public class Modelo {
 	public static String RUTAV = "./data/bogota_vertices.txt";
 	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
-	private GrafoNoDirigido<Llave, Informacion> grafo;
+	private GrafoNoDirigido<Integer, Informacion> grafo;
 
 	public void cargaTexto() {
 		FileReader a;
@@ -38,9 +38,13 @@ public class Modelo {
 			String cadena;
 			v = new FileReader(RUTAV);
 			bv = new BufferedReader(v);
-
-			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
-			int cont = 0;
+			
+			a = new FileReader(RUTAA);
+			ba = new BufferedReader(a);
+			
+			grafo = new GrafoNoDirigido<Integer, Informacion>(997);
+			
+			
 			while((cadena = bv.readLine()) != null) {
 				String[] partes = cadena.split(",");
 				
@@ -49,38 +53,32 @@ public class Modelo {
 				Double l2 = Double.parseDouble(partes[2]);
 				
 				Informacion actual = new Informacion(id, l1, l2);
-				Llave llave = new Llave(id);
 				//if (id >= 0 && id <11)	System.out.println(llave.hashCode());
-				grafo.addVertex(llave, actual);
-				cont++;
+				grafo.addVertex(id, actual);
 			}
-			System.out.println(cont);
 
 			bv.close();
 
 			a = new FileReader(RUTAA);
 			ba = new BufferedReader(a);
-			
-			for (int i = 0; i < 3; i++) {
-				ba.readLine();
-			}
+		
 			
 			while((cadena = ba.readLine()) != null) {
 				String[] partes = cadena.split(" ");
 				
-				Llave llaveInicio = new Llave(Integer.parseInt(partes[0]));
-				//if (Integer.parseInt(partes[0])>=0 && Integer.parseInt(partes[0])<11) System.out.println("Llave arco; " + llaveInicio.hashCode());
-				Informacion inicio = grafo.getInfoVertex(llaveInicio);
+				Integer id = Integer.parseInt(partes[0]);
+				Informacion inicio = grafo.getInfoVertex(id);
 				
 				for (int i = 1; i < partes.length-1; i++) {
-					Llave llaveFin = new Llave(Integer.parseInt(partes[i]));
-					Informacion fin = grafo.getInfoVertex(llaveFin);
+					Integer idAdj = Integer.parseInt(partes[i]);
+					Informacion fin = grafo.getInfoVertex(idAdj);
 					
-					if (inicio != null || fin != null) grafo.addEdge(llaveInicio, llaveFin, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
+					if (inicio != null && fin != null) grafo.addEdge(id, idAdj, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
 				}
 			}
 			
 			ba.close();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,12 +101,12 @@ public class Modelo {
 
 	// Vamos a guardar los datos bajo el nombre de datos.json
 	public void escribirJson() {
-		Iterable<Llave> llaves = grafo.keys();
+		Iterable<Integer> ids = grafo.keys();
 		Informacion [] informaciones = new Informacion[grafo.V()];
 
 		int indice = 0;
 
-		for (Llave llave : llaves) informaciones[indice++] = grafo.getInfoVertex(llave);
+		for (Integer id : ids) informaciones[indice++] = grafo.getInfoVertex(id);
 
 		Gson graphWriter = new Gson();
 
@@ -130,17 +128,16 @@ public class Modelo {
 
 			JsonArray a = elem.getAsJsonArray();
 
-			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
+			grafo = new GrafoNoDirigido<Integer, Informacion>(997);
 
 			for (JsonElement e : a) {
 
-				int id = e.getAsJsonObject().get("id").getAsInt();
-				double longitud = e.getAsJsonObject().get("longitud").getAsDouble();
-				double latitud = e.getAsJsonObject().get("latitud").getAsDouble();
+				Integer id = e.getAsJsonObject().get("id").getAsInt();
+				Double longitud = e.getAsJsonObject().get("longitud").getAsDouble();
+				Double latitud = e.getAsJsonObject().get("latitud").getAsDouble();
 
 				Informacion nuevo = new Informacion(id, longitud, latitud);
-				Llave llave = new Llave(id);
-				grafo.addVertex(llave, nuevo);
+				grafo.addVertex(id, nuevo);
 			}
 
 			reader.close();
