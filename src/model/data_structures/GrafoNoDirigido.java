@@ -13,7 +13,10 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		colorActual = 0;
 		adj = new SeparateChainingHashST<K, Vertice<K, V>>(n);	
 	}
-
+	
+	public Iterable<K> keys() {
+		return adj.keys();
+	}
 
 	public int V(){
 		return adj.size();
