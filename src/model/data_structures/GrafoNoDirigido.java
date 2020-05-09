@@ -4,20 +4,19 @@ import java.util.Iterator;
 
 public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
-	private int V;
 	private int E;
-	private int coloresUsados;
+	private int colorActual;
 	private SeparateChainingHashST<K, Vertice<K, V>> adj;
 
-	GrafoNoDirigido (int n){
-		this.V = n; 
+	public GrafoNoDirigido (int n){ 
 		this.E = 0;
+		colorActual = 0;
 		adj = new SeparateChainingHashST<K, Vertice<K, V>>(n);	
 	}
 
 
 	public int V(){
-		return V;
+		return adj.size();
 	}
 
 	public int E(){
@@ -87,37 +86,43 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		}
 	}
 
-	public void posDfs(K s, Arco<K,V> arcoInicial){
+	public void posDfs(K s, Arco<K,V> arcoInicial, int pColor){
 		Iterable<K> llaves = adj(s);
-		adj.get(s).marcar(coloresUsados, arcoInicial);
+		adj.get(s).marcar(pColor, arcoInicial);
 		for (K llave : llaves)
 			if (adj.get(llave).darMarca() == false){
-				posDfs(llave, darArco(s, llave));
+				posDfs(llave, darArco(s, llave), pColor);
 			}
-		coloresUsados++;
+		colorActual++;
 	}
 	
 	public void dfs(K s){
 		uncheck();
-		posDfs(s, null);
+		colorActual = 0;
+		posDfs(s, null, colorActual);
 	}
 	
 	public int cc(){
-		int contador = 0;
-		int[] colores;
-		marked = new boolean[G.V()];
-        id = new int[G.V()];
-        size = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) {
-            if (!marked[v]) {
-                dfs(G, v);
-                res++;
-            }
-        }
-        return contador;
+		Iterable<K> llaves = adj.keys();
+		uncheck();
+		colorActual = 0;
+		for (K llave : llaves)
+		{
+			if (adj.get(llave).darColor() == -1) posDfs(llave,null,colorActual);
+		}
+		return colorActual+1;
 	}
 	
 	public Iterable<K> getCC(K idVertex){
-		
+		dfs(idVertex);
+		Vertice<K,V> inicio = adj.get(idVertex);
+		Iterable<K> llaves = adj.keys();
+		LinkedQueue<K> respuesta = new LinkedQueue<K>();
+		for (K llave : llaves)
+		{
+			Vertice<K,V> ver = adj.get(llave);
+			if (ver.darColor() == inicio.darColor()) respuesta.enqueue(llave);;
+		}
+		return respuesta;
 	}
 }

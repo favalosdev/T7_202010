@@ -1,7 +1,9 @@
 package model.logic;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import model.data_structures.GrafoNoDirigido;
+
 /**
  * Definicion del modelo del mundo
  *
@@ -22,14 +26,65 @@ import com.google.gson.stream.JsonReader;
 public class Modelo{
 
 	public static String PATH = "./data/Comparendos_DEI_2018_Bogotá_D.C_small.geojson";
+	public static String RUTAA = "./data/bogota_arcos.txt";
+	public static String RUTAV = "./data/bogota_vertices.txt";
 	//	public static String PATH = "./data/Comparendos_DEI_2018_Bogot�_D.C.geojson";
+	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
 	private int numeroDatos;
+	
+	private GrafoNoDirigido<LlaveVertice,Vertice> grafo;
+	
+	public void cargaTexto() throws FileNotFoundException, IOException {
+        String cadena;
+        FileReader a = new FileReader(RUTAA);
+        FileReader v = new FileReader(RUTAV);
+        BufferedReader ba = new BufferedReader(a);
+        BufferedReader bv = new BufferedReader(v);
+        grafo = new GrafoNoDirigido<LlaveVertice,Vertice>(997);
+        while((cadena = ba.readLine())!=null) {
+            String[] partes = cadena.split(" ");
+            Vertice ver = new Vertice(new Integer (partes[0]),new Double (partes[1]),new Double(partes[2]));
+            grafo.addVertex(new LlaveVertice(new Integer (partes[0])), ver);
+        }
+        ba.close();
+        while((cadena = bv.readLine())!=null) {
+        	String[] partes = cadena.split(" ");
+        	LlaveVertice llaveInicio = new LlaveVertice(new Integer (partes[0]));
+        	Vertice verInicio = grafo.getInfoVertex(llaveInicio);
+            for (int i = 1; i < partes.length-1; i++) {
+            	LlaveVertice llaveFin = new LlaveVertice(new Integer (partes[i]));
+            	Vertice verFin = grafo.getInfoVertex(llaveFin);
+				grafo.addEdge(llaveInicio, llaveFin, distance(verInicio.darLatitud(), verInicio.darLongitud(), verFin.darLatitud(), verFin.darLongitud()));
+			}
+        }
+        bv.close();
+    }
+
+    public static double distance(double startLat, double startLong,
+                                  double endLat, double endLong) {
+
+        double dLat  = Math.toRadians((endLat - startLat));
+        double dLong = Math.toRadians((endLong - startLong));
+
+        startLat = Math.toRadians(startLat);
+        endLat   = Math.toRadians(endLat);
+
+        double a = haversin(dLat) + Math.cos(startLat) * Math.cos(endLat) * haversin(dLong);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS * c; // <-- d
+    }
+
+    public static double haversin(double val) {
+        return Math.pow(Math.sin(val / 2), 2);
+    }
 
 	public void cargarDatos() {
 
 		JsonReader reader;
 		try {
+			cargaTexto();
 			reader = new JsonReader(new FileReader(PATH));
 			JsonElement elem = JsonParser.parseReader(reader);
 			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();

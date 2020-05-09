@@ -19,5 +19,17 @@ public class Vertice{
 		longitud = pLongitud;
 		latitud = pLatitud;
 	}
+	
+	public int darId(){
+		return id;
+	}
+	
+	public double darLongitud(){
+		return longitud;
+	}
+	
+	public double darLatitud(){
+		return latitud;
+	}
 
 }

@@ -15,13 +15,19 @@ public class Vertice<K extends Comparable<K>, V>{
 	private Bag<Arco<K,V>> adj;
 
 	public Vertice(K id, V info) {
+		Bag<Arco<K,V>> adj = new Bag<Arco<K,V>>();
 		idVertice = id;
 		infoVertice = info;
+		color = -1;
 		arcoLlegada = null;
 	}
 	
 	public K darId() {
 		return idVertice;
+	}
+	
+	public Arco<K,V> darArcoLlegada(){
+		return arcoLlegada;
 	}
 	
 	public void ponerInfo(V pInfoVertice) {
@@ -34,9 +40,7 @@ public class Vertice<K extends Comparable<K>, V>{
 	
 	public void agregarArco(Arco<K,V> arco){
 		adj.add(arco);
-	}
-	
-	
+	}	
 
 	public Iterable<Arco<K,V>> darAdyacentes(){
 		return adj;
@@ -59,14 +63,13 @@ public class Vertice<K extends Comparable<K>, V>{
 	
 	public void desmarcar( ){
 		marca = false;
+		color = -1;
+		arcoLlegada = null;
 	}
 	
-	public void dfs( int colorP, Arco<K,V> arcoLlega ){
-		
-	}
-	
-	public void bfs( int colorP){
-		
+	public void desmarcaParcial( ){
+		marca = false;
+		arcoLlegada = null;
 	}
 
 }
