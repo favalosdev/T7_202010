@@ -40,7 +40,7 @@ public class Vertice<K extends Comparable<K>, V>{
 	
 	public void agregarArco(Arco<K,V> arco){
 		adj.add(arco);
-	}	
+	}
 
 	public Iterable<Arco<K,V>> darAdyacentes(){
 		return adj;

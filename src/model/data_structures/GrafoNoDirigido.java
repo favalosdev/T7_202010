@@ -27,11 +27,13 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 
 	public void addEdge(K idVertexIni, K idVertexFin, double cost) {
-		Vertice<K, V> i = adj.get(idVertexIni);
-		Vertice<K, V> f = adj.get(idVertexFin);
-
-		i.agregarArco(new Arco<K, V>(i, f, cost));
-		f.agregarArco(new Arco<K, V>(f, i, cost));
+		Vertice<K,V> i = adj.get(idVertexIni);
+		Vertice<K,V> f = adj.get(idVertexFin);
+		
+		
+		if (i == null || f == null) return;
+		i.agregarArco(new Arco<K,V>(i, f, cost));
+		f.agregarArco(new Arco<K,V>(f, i, cost));
 		E++;
 	}
 
@@ -45,9 +47,9 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 	
 	public Arco<K,V> darArco(K idOrig, K idDest){
-		Iterable<Arco<K, V>> arcos = adj.get(idOrig).darAdyacentes();
+		Iterable<Arco<K,V>> arcos = adj.get(idOrig).darAdyacentes();
 
-		for (Arco<K, V> arco : arcos) {
+		for (Arco<K,V> arco : arcos) {
 			if (arco.darDestino().darId().compareTo(idDest) == 0)
 				return arco;
 		}
@@ -70,8 +72,8 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		adj.put(idVertex, new Vertice<K, V>(idVertex, infoVertex));
 	}
 
-	public Iterable<K> adj(K idVertex) {
-		Iterable<Arco<K, V>> arcos = adj.get(idVertex).darAdyacentes();
+	public Iterable<K> vAdj(K idVertex) {
+		Iterable<Arco<K,V>> arcos = adj.get(idVertex).darAdyacentes();
 		LinkedQueue<K> llaves = new LinkedQueue<K>();
 
 		for (Arco<K, V> arco : arcos)
@@ -90,7 +92,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 
 	public void posDfs(K s, Arco<K,V> arcoInicial, int pColor){
-		Iterable<K> llaves = adj(s);
+		Iterable<K> llaves = vAdj(s);
 		adj.get(s).marcar(pColor, arcoInicial);
 		for (K llave : llaves)
 			if (adj.get(llave).darMarca() == false){
