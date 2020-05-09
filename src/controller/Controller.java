@@ -39,9 +39,8 @@ public class Controller {
 			switch(option){
 				case 1:
 					modelo.cargaTexto();
-					
-					System.out.println("Numero de vertices: " + modelo.numeroVertices());
-					System.out.println("Numero de arco: " + modelo.numeroVertices());
+					System.out.println("Numero de vertices: " + modelo.V());
+					System.out.println("Numero de arco: " + modelo.E());
 					
 					break;
 
@@ -51,9 +50,8 @@ public class Controller {
 
 				case 3:
 					modelo.leerJson();
-					
-					System.out.println("Numero de vertices: " + modelo.numeroVertices());
-					System.out.println("Numero de arco: " + modelo.numeroVertices());
+					System.out.println("Numero de vertices: " + modelo.V());
+					System.out.println("Numero de arco: " + modelo.E());
 					
 					break;
 

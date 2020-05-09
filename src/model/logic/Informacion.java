@@ -7,13 +7,13 @@ package model.logic;
  * @author Fernando De la Rosa
  *
  */
-public class Vertice {
+public class Informacion {
 
 	private int id;
 	private double longitud;
 	private double latitud;
 
-	public Vertice(int pId, double pLongitud, double pLatitud) {
+	public Informacion(int pId, double pLongitud, double pLatitud) {
 		id = pId;
 		longitud = pLongitud;
 		latitud = pLatitud;
@@ -30,5 +30,4 @@ public class Vertice {
 	public double darLatitud() {
 		return latitud;
 	}
-
 }

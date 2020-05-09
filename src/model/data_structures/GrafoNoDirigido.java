@@ -13,7 +13,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		colorActual = 0;
 		adj = new SeparateChainingHashST<K, Vertice<K, V>>(n);	
 	}
-	
+
 	public Iterable<K> keys() {
 		return adj.keys();
 	}
@@ -29,8 +29,8 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	public void addEdge(K idVertexIni, K idVertexFin, double cost) {
 		Vertice<K,V> i = adj.get(idVertexIni);
 		Vertice<K,V> f = adj.get(idVertexFin);
-		
-		
+
+
 		if (i == null || f == null) return;
 		i.agregarArco(new Arco<K,V>(i, f, cost));
 		f.agregarArco(new Arco<K,V>(f, i, cost));
@@ -45,7 +45,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	public void setInfoVertex(K idVertex, V infoVertex){
 		adj.get(idVertex).ponerInfo(infoVertex);
 	}
-	
+
 	public Arco<K,V> darArco(K idOrig, K idDest){
 		Iterable<Arco<K,V>> arcos = adj.get(idOrig).darAdyacentes();
 
@@ -72,7 +72,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		adj.put(idVertex, new Vertice<K, V>(idVertex, infoVertex));
 	}
 
-	public Iterable<K> vAdj(K idVertex) {
+	public Iterable<K> adj(K idVertex) {
 		Iterable<Arco<K,V>> arcos = adj.get(idVertex).darAdyacentes();
 		LinkedQueue<K> llaves = new LinkedQueue<K>();
 
@@ -84,47 +84,46 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	public void uncheck(){
 		Iterable<K> llaves = adj.keys();
-		for (K llave : llaves)
-		{
+		for (K llave : llaves) {
 			Vertice<K,V> ver = adj.get(llave);
 			ver.desmarcar();
 		}
 	}
 
 	public void posDfs(K s, Arco<K,V> arcoInicial, int pColor){
-		Iterable<K> llaves = vAdj(s);
+		Iterable<K> llaves = adj(s);
 		adj.get(s).marcar(pColor, arcoInicial);
-		for (K llave : llaves)
+		
+		for (K llave : llaves) {
 			if (adj.get(llave).darMarca() == false){
 				posDfs(llave, darArco(s, llave), pColor);
 			}
+		}
 		colorActual++;
 	}
-	
+
 	public void dfs(K s){
 		uncheck();
 		colorActual = 0;
 		posDfs(s, null, colorActual);
 	}
-	
+
 	public int cc(){
 		Iterable<K> llaves = adj.keys();
 		uncheck();
 		colorActual = 0;
-		for (K llave : llaves)
-		{
-			if (adj.get(llave).darColor() == -1) posDfs(llave,null,colorActual);
-		}
+		for (K llave : llaves) if (adj.get(llave).darColor() == -1) posDfs(llave,null,colorActual);
+
 		return colorActual+1;
 	}
-	
+
 	public Iterable<K> getCC(K idVertex){
 		dfs(idVertex);
 		Vertice<K,V> inicio = adj.get(idVertex);
 		Iterable<K> llaves = adj.keys();
 		LinkedQueue<K> respuesta = new LinkedQueue<K>();
-		for (K llave : llaves)
-		{
+		
+		for (K llave : llaves) {
 			Vertice<K,V> ver = adj.get(llave);
 			if (ver.darColor() == inicio.darColor()) respuesta.enqueue(llave);;
 		}

@@ -7,11 +7,11 @@ package model.logic;
  * @author Fernando De la Rosa
  *
  */
-public class LlaveVertice implements Comparable<LlaveVertice> {
+public class Llave implements Comparable<Llave> {
 	
 		private final Integer id;
 		
-		public LlaveVertice(Integer pId) {
+		public Llave(Integer pId) {
 			id = pId;
 		}
 		
@@ -21,7 +21,7 @@ public class LlaveVertice implements Comparable<LlaveVertice> {
 			 return hash;
 		}
 
-		public int compareTo(LlaveVertice otra) {
+		public int compareTo(Llave otra) {
 			return hashCode() - otra.hashCode();
 		}
 

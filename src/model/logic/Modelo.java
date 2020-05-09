@@ -20,47 +20,59 @@ import model.data_structures.GrafoNoDirigido;
  * Definicion del modelo del mundo
  *
  */
-public class Modelo{
+public class Modelo {
 
 	public static String RUTAA = "./data/bogota_arcos.txt";
 	public static String RUTAV = "./data/bogota_vertices.txt";
 	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
-	private int numeroDatos;
+	private GrafoNoDirigido<Llave, Informacion> grafo;
 
-	private GrafoNoDirigido<LlaveVertice,Vertice> grafo;
+	public void cargaTexto() {
+		FileReader a;
+		FileReader v;
+		BufferedReader ba;
+		BufferedReader bv;
 
-	public void cargaTexto() throws FileNotFoundException, IOException {
-		String cadena;
-		FileReader a = new FileReader(RUTAA);
-		FileReader v = new FileReader(RUTAV);
-		BufferedReader ba = new BufferedReader(a);
-		BufferedReader bv = new BufferedReader(v);
+		try {
+			String cadena;
+			a = new FileReader(RUTAA);
+			v = new FileReader(RUTAV);
+			ba = new BufferedReader(a);
+			bv = new BufferedReader(v);
 
-		grafo = new GrafoNoDirigido<LlaveVertice,Vertice>(997);
+			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
 
-		while((cadena = ba.readLine()) != null) {
-			String[] partes = cadena.split(" ");
-			Vertice ver = new Vertice(new Integer (partes[0]),new Double (partes[1]),new Double(partes[2]));
-			grafo.addVertex(new LlaveVertice(new Integer (partes[0])), ver);
-		}
+			while((cadena = bv.readLine()) != null) {
+				String[] partes = cadena.split(",");
+				Informacion actual = new Informacion(new Integer(partes[0]), new Double(partes[1]), new Double(partes[2]));
+				grafo.addVertex(new Llave(new Integer(partes[0])), actual);
+			}
 
-		ba.close();
+			bv.close();
 
-		while((cadena = bv.readLine())!=null) {
-			String[] partes = cadena.split(" ");
-			LlaveVertice llaveInicio = new LlaveVertice(new Integer (partes[0]));
-			Vertice verInicio = grafo.getInfoVertex(llaveInicio);
-			if (verInicio != null){
+			while((cadena = ba.readLine()) != null) {
+				String[] partes = cadena.split(" ");
+				Llave llaveInicio = new Llave(new Integer(partes[0]));
+				Informacion inicio = grafo.getInfoVertex(llaveInicio);
+
+				//if (verInicio == null) return;
+
 				for (int i = 1; i < partes.length-1; i++) {
-					LlaveVertice llaveFin = new LlaveVertice(new Integer (partes[i]));
-					Vertice verFin = grafo.getInfoVertex(llaveFin);
-					if (verFin != null) grafo.addEdge(llaveInicio, llaveFin, distance(verInicio.darLatitud(), verInicio.darLongitud(), verFin.darLatitud(), verFin.darLongitud()));
+					Llave llaveFin = new Llave(new Integer(partes[i]));
+					Informacion fin = grafo.getInfoVertex(llaveFin);
+
+					//if (verFin == null) return;
+
+					grafo.addEdge(llaveInicio, llaveFin, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
 				}
 			}
-		}
+			
+			ba.close();
 
-		bv.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static double distance(double startLat, double startLong,
@@ -80,21 +92,21 @@ public class Modelo{
 
 	// Vamos a guardar los datos bajo el nombre de datos.json
 	public void escribirJson() {
-		Iterable<LlaveVertice> llaves = grafo.keys();
-		Vertice [] vertices = new Vertice[grafo.V()];
+		Iterable<Llave> llaves = grafo.keys();
+		Informacion [] informaciones = new Informacion[grafo.V()];
 
 		int indice = 0;
 
-		for (LlaveVertice llave : llaves) vertices[indice++] = grafo.getInfoVertex(llave);
+		for (Llave llave : llaves) informaciones[indice++] = grafo.getInfoVertex(llave);
 
 		Gson graphWriter = new Gson();
 
 		try {
 			FileWriter fw = new FileWriter("./data/datos.gson");
-			graphWriter.toJson(vertices, fw);
+			graphWriter.toJson(informaciones, fw);
 
 		} catch (IOException e) {
-			// No hacer nada JAJAJAJAJA
+			e.printStackTrace();
 		}
 	}
 
@@ -107,7 +119,7 @@ public class Modelo{
 
 			JsonArray a = elem.getAsJsonArray();
 
-			grafo = new GrafoNoDirigido<LlaveVertice,Vertice>(997);
+			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
 
 			for (JsonElement e : a) {
 
@@ -115,22 +127,22 @@ public class Modelo{
 				double longitud = e.getAsJsonObject().get("longitud").getAsDouble();
 				double latitud = e.getAsJsonObject().get("latitud").getAsDouble();
 
-				Vertice nuevo = new Vertice(id, longitud, latitud);
-				LlaveVertice llave = new LlaveVertice(id);
+				Informacion nuevo = new Informacion(id, longitud, latitud);
+				Llave llave = new Llave(id);
 				grafo.addVertex(llave, nuevo);
 			}
 
 			reader.close();
 		} catch (Exception e) {
-			// No hacer nada JAJAJAJAJ
+			e.printStackTrace();
 		}
 	}
-	
-	public int numeroVertices(){
+
+	public int V(){
 		return grafo.V();
 	}
-	
-	public int numeroArcos(){
+
+	public int E(){
 		return grafo.E();
 	}
 
