@@ -5,11 +5,13 @@ import java.util.Iterator;
 public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	private int E;
+	private int V;
 	private int colorActual;
 	private SeparateChainingHashST<K, Vertice<K, V>> adj;
 
 	public GrafoNoDirigido (int n){ 
 		this.E = 0;
+		this.V = 0;
 		colorActual = 0;
 		adj = new SeparateChainingHashST<K, Vertice<K, V>>(n);	
 	}
@@ -19,7 +21,8 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 	}
 
 	public int V(){
-		return adj.size();
+		return V;
+		//return adj.size();
 	}
 
 	public int E(){
@@ -41,7 +44,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 		
 		Vertice<K, V> v = adj.get(idVertex);
 		
-		
+		if (v == null) return null;
 		return v.darInfo();
 	}
 
@@ -73,6 +76,7 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	public void addVertex(K idVertex, V infoVertex) {
 		adj.put(idVertex, new Vertice<K, V>(idVertex, infoVertex));
+		V++;
 	}
 
 	public Iterable<K> adj(K idVertex) {

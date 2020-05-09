@@ -23,7 +23,7 @@ public class TestGrafoNoDirigido {
 	public void setUp2() {
 		setUp1();
 		//table.addVertex("1", 1);
-		for (int i = 0; i < TAMANO1; i++) {
+		for (int i = 1; i < TAMANO1+1; i++) {
 			table.addVertex(i + "", i);
 		}
 	}
@@ -69,7 +69,7 @@ public class TestGrafoNoDirigido {
 
 	public void setUp8() {
 		setUp3();
-		for (int i = 1; i < TAMANO1; i=i+2) {
+		for (int i = 1; i < TAMANO2; i=i+2) {
 			table.addEdge(i+"", i+1+"", 3.1);
 		}
 	}
@@ -147,16 +147,16 @@ public class TestGrafoNoDirigido {
 	public void testDarCostoArco(){
 		setUp2();
 		setUp4();
-		assertEquals("El costo del arco no es el correcto", 5.0, table.getCostArc("1", "2"));
+		assertEquals("El costo del arco no es el correcto", 5.0+"", table.getCostArc("1", "2")+"");
 		setUp2();
 		setUp6();
-		assertEquals("El costo del arco no es el correcto", 3.1, table.getCostArc("1", "2"));
+		assertEquals("El costo del arco no es el correcto", 3.1+"", table.getCostArc("1", "2")+"");
 		setUp2();
 		setUp7();
-		assertEquals("El costo del arco no es el correcto", 2.0, table.getCostArc("1", "2"));
+		assertEquals("El costo del arco no es el correcto", 2.0+"", table.getCostArc("1", "5")+"");
 		setUp3();
 		setUp8();
-		assertEquals("El costo del arco no es el correcto", 3.1, table.getCostArc("1", "2"));
+		assertEquals("El costo del arco no es el correcto", 3.1+"", table.getCostArc("1", "2")+"");
 	}
 
 }

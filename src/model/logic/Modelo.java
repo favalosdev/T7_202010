@@ -40,7 +40,7 @@ public class Modelo {
 			bv = new BufferedReader(v);
 
 			grafo = new GrafoNoDirigido<Llave, Informacion>(997);
-
+			int cont = 0;
 			while((cadena = bv.readLine()) != null) {
 				String[] partes = cadena.split(",");
 				
@@ -50,29 +50,38 @@ public class Modelo {
 				
 				Informacion actual = new Informacion(id, l1, l2);
 				Llave llave = new Llave(id);
+				//if (id >= 0 && id <11)	System.out.println(llave.hashCode());
 				grafo.addVertex(llave, actual);
+				cont++;
 			}
+			System.out.println(cont);
 
 			bv.close();
 
 			a = new FileReader(RUTAA);
 			ba = new BufferedReader(a);
 			
+			for (int i = 0; i < 3; i++) {
+				ba.readLine();
+			}
+			
 			while((cadena = ba.readLine()) != null) {
 				String[] partes = cadena.split(" ");
 				
 				Llave llaveInicio = new Llave(Integer.parseInt(partes[0]));
+				//if (Integer.parseInt(partes[0])>=0 && Integer.parseInt(partes[0])<11) System.out.println("Llave arco; " + llaveInicio.hashCode());
 				Informacion inicio = grafo.getInfoVertex(llaveInicio);
 				
 				for (int i = 1; i < partes.length-1; i++) {
 					Llave llaveFin = new Llave(Integer.parseInt(partes[i]));
 					Informacion fin = grafo.getInfoVertex(llaveFin);
 					
-					grafo.addEdge(llaveInicio, llaveFin, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
+					if (inicio != null || fin != null) grafo.addEdge(llaveInicio, llaveFin, distance(inicio.darLatitud(), inicio.darLongitud(), fin.darLatitud(), fin.darLongitud()));
 				}
 			}
 			
 			ba.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
