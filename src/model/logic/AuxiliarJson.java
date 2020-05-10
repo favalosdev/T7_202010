@@ -6,7 +6,7 @@ public class AuxiliarJson {
 	private Integer id;
 	private Double latitud;
 	private Double longitud;
-	private Dupla [] arcos;
+	private Dupla[] arcos;
 	
 	public AuxiliarJson(Informacion info, Dupla [] arcos) {
 		id = info.darId();

@@ -23,6 +23,14 @@ public class Estacion{
 		longitud = pLong;
 	}
 	
+	public double darLongitud(){
+		return longitud;
+	}
+	
+	public double darLatitud(){
+		return latitud;
+	}
+	
 	public String toString() {
 		return "Estacion [OBJECTID= " + objectId + ", LATITUD= " + latitud + ", LONGITUD= " + longitud + "]";
 	}

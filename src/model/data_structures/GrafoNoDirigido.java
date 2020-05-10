@@ -22,7 +22,6 @@ public class GrafoNoDirigido<K extends Comparable<K>, V> {
 
 	public int V(){
 		return V;
-		//return adj.size();
 	}
 
 	public int E(){

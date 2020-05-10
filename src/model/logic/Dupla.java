@@ -1,6 +1,6 @@
 package model.logic;
 
-public class Dupla {
+public class Dupla{
 
 	int id;
 	double costo;

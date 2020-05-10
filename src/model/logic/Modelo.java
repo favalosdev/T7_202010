@@ -11,9 +11,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+
+import javafx.scene.shape.Arc;
+
 import com.google.gson.GsonBuilder;
 import model.data_structures.Arco;
 import model.data_structures.ListaEnlazada;
+import model.data_structures.Vertice;
+import view.Maps;
 
 import java.io.FileWriter;
 import java.io.File;
@@ -26,9 +31,13 @@ import model.data_structures.GrafoNoDirigido;
  */
 public class Modelo {
 
-	public static String RUTAA = "./data/bogota_arcos.txt";
-	public static String RUTAV = "./data/bogota_vertices.txt";
+	public static final String RUTAA = "./data/bogota_arcos.txt";
+	public static final String RUTAV = "./data/bogota_vertices.txt";
 	private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
+	private static final double LONGITUD_MIN = -74.094723;
+	private static final double LONGITUD_MAX = -74.062707;
+	private static final double LATITUD_MIN = 4.597714;
+	private static final double LATITUD_MAX = 4.621360;
 
 	private GrafoNoDirigido<Integer, Informacion> grafo;
 	private Estacion[] arregloEst;
@@ -62,6 +71,7 @@ public class Modelo {
 				Double l2 = Double.parseDouble(partes[2]);
 				
 				Informacion actual = new Informacion(id, l1, l2);
+				
 				//if (id >= 0 && id <11)	System.out.println(llave.hashCode());
 				grafo.addVertex(id, actual);
 			}
@@ -71,6 +81,9 @@ public class Modelo {
 			a = new FileReader(RUTAA);
 			ba = new BufferedReader(a);
 		
+			for (int i = 0; i < 3; i++) {
+				ba.readLine();
+			}
 			
 			while((cadena = ba.readLine()) != null) {
 				String[] partes = cadena.split(" ");
@@ -181,6 +194,28 @@ public class Modelo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ListaEnlazada<Informacion> verticesUtiles(){
+		ListaEnlazada<Informacion> arreglo = new ListaEnlazada<Informacion>();
+		Iterable<Integer> llaves = grafo.keys();
+		for (Integer llave : llaves) {
+			Informacion ver = grafo.getInfoVertex(llave);
+			if (ver.darLatitud()<=LATITUD_MAX && ver.darLatitud()>=LATITUD_MIN && ver.darLongitud()<=LONGITUD_MAX && ver.darLongitud()>=LONGITUD_MIN){
+				arreglo.agregar(ver);
+			}
+		}
+		return arreglo;
+	}
+	
+	public void visualizacion(){
+		Maps mapsReqX = new Maps(verticesUtiles());
+		mapsReqX.initFrame();
+	}
+	
+	public void visualizacionFinal(){
+		Maps mapsReqX = new Maps(verticesUtiles(), arregloEst);
+		mapsReqX.initFrame();
 	}
 	
 	public int cargarEstaciones() {

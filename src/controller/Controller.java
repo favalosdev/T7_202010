@@ -29,8 +29,6 @@ public class Controller {
 	{
 		Scanner lector = new Scanner(System.in);
 		boolean fin = false;
-		String dato = "";
-		String respuesta = "";
 
 		while( !fin ){
 			view.printMenu();
@@ -56,7 +54,7 @@ public class Controller {
 					break;
 
 				case 4:
-					
+					modelo.visualizacion();
 					break;
 
 				case 5:
@@ -68,13 +66,13 @@ public class Controller {
 					break;	
 					
 				case 6: 
-					System.out.println("--------- \n Hasta pronto !! \n---------"); 
-					lector.close();
-					fin = true;
+					modelo.visualizacionFinal();
 					break;
 					
 				case 7:
-					
+					System.out.println("--------- \n Hasta pronto !! \n---------"); 
+					lector.close();
+					fin = true;
 					break;
 
 				default: 
