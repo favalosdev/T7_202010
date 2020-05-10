@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import model.logic.Modelo;
-import quicktime.app.time.TaskAllMovies;
 import view.View;
 
 public class Controller {

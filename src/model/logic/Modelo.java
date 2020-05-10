@@ -139,7 +139,7 @@ public class Modelo {
 		try {
 			FileWriter fw = new FileWriter("./data/datos.geojson");
 			graphWriter.toJson(auxiliares, fw);
-
+			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

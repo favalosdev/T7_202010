@@ -7,7 +7,8 @@ package model.logic;
  * @author Fernando De la Rosa
  *
  */
-public class Informacion {
+
+public class Informacion implements Comparable<Informacion>{
 
 	private int id;
 	private double longitud;
@@ -29,5 +30,9 @@ public class Informacion {
 	
 	public double darLatitud() {
 		return latitud;
+	}
+	
+	public int compareTo(Informacion i2) {
+		return 0;
 	}
 }
